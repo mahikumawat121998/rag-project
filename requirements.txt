@@ -1,0 +1,29 @@
+# Core LangChain & Providers
+langchain
+langchain-community
+langchain-openai
+langchain-google-genai
+langchain-text-splitters
+
+# Vector Store
+chromadb
+
+# Document parsing
+pypdf
+docx2txt
+
+# Utilities & Environment
+python-dotenv
+pydantic
+pydantic-settings
+
+# Jupyter
+notebook
+ipykernel
+
+# API & Frontend (for subsequent phases)
+fastapi
+uvicorn
+python-multipart
+streamlit
+requests

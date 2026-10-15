@@ -1,0 +1,28 @@
+# Virtual Environment
+.venv/
+venv/
+ENV/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Environment variables & secrets
+.env
+
+# Vector Store database
+data/chroma_db/
+chroma_db/
+*.sqlite3
+
+# Uploaded documents
+data/uploads/
+
+# Jupyter Checkpoints
+.ipynb_checkpoints/
+
+# IDE files
+.vscode/
+.idea/

@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: nimbus_rag_backend
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - LLM_MODEL=gemini-3.5-flash-lite
+      - EMBEDDING_MODEL=models/gemini-embedding-001
+      - RETRIEVER_K=5
+    volumes:
+      # Persistent storage for ChromaDB and uploaded files
+      - ./data:/app/data
+      - ./document:/app/document
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: nimbus_rag_frontend
+    restart: always
+    ports:
+      - "8501:8501"
+    environment:
+      - API_BASE_URL=http://backend:8000
+    depends_on:
+      - backend

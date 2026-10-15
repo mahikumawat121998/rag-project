@@ -1,0 +1,28 @@
+# NovaTech Solutions - AI Usage Policy & Technical Guidelines (2026)
+
+## 1. Overview & Purpose
+NovaTech Solutions is committed to leveraging artificial intelligence (AI) to enhance internal productivity, customer experience, and software engineering workflows. This document outlines acceptable usage, data privacy restrictions, API rate governance, and standard architecture requirements for all generative AI applications developed within the company.
+
+## 2. Permitted AI Models and Providers
+NovaTech officially supports and approves the following models:
+- **Cloud Models**: OpenAI GPT-4o, GPT-4o-mini, and text-embedding-3-small via secure enterprise endpoints.
+- **Local / Edge Models**: Ollama with Llama-3.2 (3B and 8B) for on-premise development and sensitive data isolation.
+- Usage of unapproved third-party consumer chat interfaces with proprietary company code is strictly prohibited.
+
+## 3. Data Privacy and Security Classification
+Company data is classified into three tiers:
+- **Tier 1 (Public Data)**: Marketing materials, open-source documentation, and public blogs. Can be sent to any approved cloud LLM.
+- **Tier 2 (Internal Business Data)**: Sprint notes, internal design specifications, and standard business emails. Permitted with OpenAI enterprise endpoints where training opt-out is legally enforced.
+- **Tier 3 (Confidential / PII Data)**: Customer personal identifiable information, passwords, private keys, financial records, and medical records. Strict prohibition from cloud LLM transmission; must only be processed via on-premise, air-gapped local models.
+
+## 4. RAG Architecture Standards
+When building Retrieval-Augmented Generation (RAG) systems at NovaTech:
+1. **Vector Storage**: Teams must use ChromaDB or pgvector.
+2. **Chunking Strategy**: Use RecursiveCharacterTextSplitter with a standard chunk size of 800-1200 characters and an overlap of 150-200 characters.
+3. **Retrieval**: Implement MMR (Maximal Marginal Relevance) or similarity scoring with a threshold of at least 0.70 to avoid hallucinated context.
+4. **Conversational Memory**: Follow-up questions must always be reformulated through a history-aware retriever chain (LCEL) before query execution.
+
+## 5. Escalation & Contact Information
+- AI Governance Officer: Elena Vance (elena.vance@novatech-internal.com)
+- Infrastructure & Vector DB Team: #ai-infrastructure on Slack
+- Security Audit Hotline: security@novatech-internal.com
