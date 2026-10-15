@@ -7,10 +7,17 @@ from typing import List, Dict, Any
 from dotenv import load_dotenv
 load_dotenv(".env")
 
+# Determine logo path reliably (supports root and subfolder execution)
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+LOGO_PATH = os.path.join(CURRENT_DIR, "assets", "logo.png")
+if not os.path.exists(LOGO_PATH):
+    LOGO_PATH = os.path.join(os.path.dirname(CURRENT_DIR), "assets", "logo.png")
+APP_ICON = LOGO_PATH if os.path.exists(LOGO_PATH) else "🤖"
+
 # Page configuration
 st.set_page_config(
     page_title="NimbusDesk AI - Enterprise Policy RAG",
-    page_icon="🤖",
+    page_icon=APP_ICON,
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -35,8 +42,9 @@ st.markdown("""
 <style>
     .main-title {
         font-size: 2.2rem;
-        font-weight: 700;
-        background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        background: linear-gradient(135deg, #2563eb 0%, #7c3aed 50%, #06b6d4 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin-bottom: 0.2rem;
@@ -55,6 +63,11 @@ st.markdown("""
         font-size: 0.8rem;
         font-weight: 600;
         margin-right: 6px;
+    }
+    [data-testid="stSidebar"] img {
+        border-radius: 16px;
+        box-shadow: 0 8px 24px rgba(37, 99, 235, 0.25);
+        margin-bottom: 0.75rem;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -227,7 +240,10 @@ if "messages" not in st.session_state:
 
 # ----------------- SIDEBAR -----------------
 with st.sidebar:
-    st.image("https://img.icons8.com/clouds/200/artificial-intelligence.png", width=90)
+    if os.path.exists(LOGO_PATH):
+        st.image(LOGO_PATH, width=110)
+    else:
+        st.image("https://img.icons8.com/clouds/200/artificial-intelligence.png", width=90)
     st.title("Nimbus Hub")
 
     if USE_SUPABASE:
@@ -285,8 +301,16 @@ with st.sidebar:
         st.rerun()
 
 # ----------------- MAIN CHAT UI -----------------
-st.markdown('<div class="main-title">NimbusDesk AI Assistant</div>', unsafe_allow_html=True)
-st.markdown('<div class="sub-title">Enterprise Conversational RAG with Google Gemini & Vector Storage</div>', unsafe_allow_html=True)
+ASSISTANT_AVATAR = LOGO_PATH if os.path.exists(LOGO_PATH) else "🤖"
+USER_AVATAR = "🧑‍💻"
+
+header_col1, header_col2 = st.columns([1, 7], vertical_alignment="center")
+with header_col1:
+    if os.path.exists(LOGO_PATH):
+        st.image(LOGO_PATH, width=82)
+with header_col2:
+    st.markdown('<div class="main-title">NimbusDesk AI Assistant</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-title">Enterprise Conversational RAG with Google Gemini & Vector Storage</div>', unsafe_allow_html=True)
 
 # Quick Prompts
 col1, col2, col3, col4 = st.columns(4)
@@ -307,7 +331,7 @@ with col4:
 
 # Display existing messages
 for msg in st.session_state.messages:
-    with st.chat_message(msg["role"], avatar="🧑‍💻" if msg["role"] == "user" else "🤖"):
+    with st.chat_message(msg["role"], avatar=USER_AVATAR if msg["role"] == "user" else ASSISTANT_AVATAR):
         st.markdown(msg["content"])
         if msg.get("sources"):
             with st.expander("🔍 Cited Sources & Page Numbers"):
@@ -324,10 +348,10 @@ prompt_to_process = quick_prompt or user_query
 
 if prompt_to_process:
     st.session_state.messages.append({"role": "user", "content": prompt_to_process, "sources": []})
-    with st.chat_message("user", avatar="🧑‍💻"):
+    with st.chat_message("user", avatar=USER_AVATAR):
         st.markdown(prompt_to_process)
 
-    with st.chat_message("assistant", avatar="🤖"):
+    with st.chat_message("assistant", avatar=ASSISTANT_AVATAR):
         with st.spinner("Searching company documents and generating answer..."):
             prior_history = st.session_state.messages[:-1]
             if USE_SUPABASE:
