@@ -35,12 +35,13 @@ print("=" * 65)
 supabase_client = create_client(supabase_url, supabase_key)
 print(f"✅ Connected to Supabase at: {supabase_url}")
 
-# 2. Initialize Gemini Embeddings
+# 2. Initialize Gemini Embeddings (768 dimensions)
 embeddings = GoogleGenerativeAIEmbeddings(
     model="models/gemini-embedding-001",
+    output_dimensionality=768,
     google_api_key=google_key
 )
-print("✅ Initialized Google Gemini Embeddings (dim: 3072)")
+print("✅ Initialized Google Gemini Embeddings (dim: 768)")
 
 # 3. Load Documents from document/ and data/sample_docs/
 def load_document(file_path: str):

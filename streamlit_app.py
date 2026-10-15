@@ -71,6 +71,7 @@ def get_supabase_vectorstore():
     supabase_client = create_client(SUPABASE_URL, SUPABASE_KEY)
     embeddings = GoogleGenerativeAIEmbeddings(
         model="models/gemini-embedding-001",
+        output_dimensionality=768,
         google_api_key=GOOGLE_API_KEY
     )
     return SupabaseVectorStore(
